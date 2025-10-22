@@ -1,0 +1,47 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.battery {
+  width: 150px;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text {
+  font-size: 28px;
+  color: green;
+  margin-top: 10px;
+}
+
+/* 📱 Responsive for smaller screens */
+@media (max-width: 768px) {
+  .battery {
+    width: 100px;
+  }
+
+  .text {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .battery {
+    width: 70px;
+  }
+
+  .text {
+    font-size: 16px;
+  }
+}
