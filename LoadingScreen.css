@@ -1,0 +1,128 @@
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  background-color: #ffffff;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+
+.battery-icon {
+  width: 120px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.app-name {
+  font-size: 2rem;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+
+.spinner {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #00bfa5;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  animation: spin 1.5s linear infinite;
+  margin: 0 auto;
+}
+
+/* Animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+@media (max-width: 480px) {
+  .battery-icon {
+    width: 60px;
+  }
+
+  .app-name {
+    font-size: 1.2rem;
+  }
+
+  .spinner {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .battery-icon {
+    width: 80px;
+  }
+
+  .app-name {
+    font-size: 1.5rem;
+  }
+
+  .spinner {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .battery-icon {
+    width: 100px;
+  }
+
+  .app-name {
+    font-size: 1.8rem;
+  }
+
+  .spinner {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+
+@media (min-width: 1025px) and (max-width: 1440px) {
+  .battery-icon {
+    width: 120px;
+  }
+
+  .app-name {
+    font-size: 2rem;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+
+@media (min-width: 1441px) {
+  .battery-icon {
+    width: 150px;
+  }
+
+  .app-name {
+    font-size: 2.3rem;
+  }
+
+  .spinner {
+    width: 50px;
+    height: 50px;
+  }
+}
