@@ -2,8 +2,8 @@
 require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('./models/User');
-const Otp = require('./models/Otp');
+const User = require('../models/User');
+const Otp = require('../models/Otp');
 const { genOtp, hashOtp, getExpiryDate } = require('../utils/otp');
 const { sendOtpEmail } = require('../services/email');
 const { sendOtpSms } = require('../services/sms');
