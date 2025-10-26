@@ -1,0 +1,51 @@
+.splash-container {
+  height: 100vh;
+  width: 100%;
+  background: linear-gradient(360deg, #186093, #043f60);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.splash-logo {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #dfe8f2;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  animation: pulse 1.5s infinite;
+}
+
+.brand-name {
+  font-weight: 700;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+.loading-bar {
+  margin-top: 1.5rem;
+  width: 160px;
+  height: 6px;
+  background: #cfd8dc;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress {
+  width: 100%;
+  height: 100%;
+  background: #42a5f5;
+  animation: load 2.5s ease-in-out;
+}
+
+@keyframes load {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
