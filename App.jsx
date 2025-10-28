@@ -1,8 +1,0 @@
-import React from "react";
-import LoadingScreen from './components/LoadingScreen';
-
-function App() {
-  return <LoadingScreen />;
-}
-
-export default App;
