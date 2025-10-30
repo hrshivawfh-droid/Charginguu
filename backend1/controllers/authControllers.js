@@ -86,9 +86,20 @@ async function sendOtp(req, res) {
 
     const isEmail = subject.includes('@');
     // To avoid enumeration, we respond OK even if user doesn't exist; we only send if user exists
-    const user = isEmail ? await User.findOne({ email: subject }) : await User.findOne({ phone: subject });
-    if (!user) return res.json({ ok: true }); // silent success
+    //const user = isEmail ? await User.findOne({ email: subject }) : await User.findOne({ phone: subject });
+    //if (!user) return res.json({ ok: true }); // silent success
+    const user = isEmail
+  ? await User.findOne({ email: subject })
+  : await User.findOne({ phone: subject });
 
+// For signup OTP: allow sending even if user doesn't exist
+if (purpose === 'signup') {
+  // continue without checking user
+} else {
+  // for forgot password, send only if user exists
+  if (!user) return res.json({ ok: true }); 
+}
+  
     const otp = genOtp();
     await Otp.create({ subject, otpHash: hashOtp(otp), purpose, expiresAt: getExpiryDate() });
 
@@ -98,7 +109,7 @@ async function sendOtp(req, res) {
     return res.json({ ok: true });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ ok: true }); // generic
+    res.status(500).json({ ok:true }); // generic
   }
 }
 
