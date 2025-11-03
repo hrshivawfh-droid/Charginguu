@@ -1,8 +1,7 @@
-// Signup.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import OTPModal from "./OTPModal";
-import api from "./api";  // import axios instance
+import api from "./api";  // axios instance
 import "./Auth.css";
 
 const Signup = () => {
@@ -16,16 +15,34 @@ const Signup = () => {
   });
   const [otpVisible, setOtpVisible] = useState(false);
   const [verified, setVerified] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
 
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+  // 🔹 Password validation function
+  const validatePassword = (password) => {
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
+    if (!regex.test(password)) {
+      return "Password must have at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.";
+    }
+    return "";
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+
+    // Re-validate password on change
+    if (name === "password") {
+      const error = validatePassword(value);
+      setPasswordError(error);
+    }
+  };
 
   const handleVerify = async () => {
     try {
-      // Send OTP to email/mobile
-      await api.post("/send-Otp", {
+      await api.post("/send-otp", {
         subject: form.email,
-        purpose: "signup"
+        purpose: "signup",
       });
       setOtpVisible(true);
       alert("OTP sent to your email/mobile.");
@@ -37,9 +54,17 @@ const Signup = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
+
+    // Validate OTP
     if (!verified) return alert("Please verify OTP first");
+
+    // Validate password match
     if (form.password !== form.confirmPassword)
       return alert("Passwords do not match");
+
+    // Validate password strength
+    const passwordCheck = validatePassword(form.password);
+    if (passwordCheck) return alert(passwordCheck);
 
     try {
       await api.post("/register", {
@@ -68,6 +93,7 @@ const Signup = () => {
             onChange={handleChange}
             required
           />
+
           <div className="otp-row">
             <input
               type="text"
@@ -76,11 +102,7 @@ const Signup = () => {
               onChange={handleChange}
               required
             />
-            <button
-              type="button"
-              className="btn-otp"
-              onClick={handleVerify}
-            >
+            <button type="button" className="btn-otp" onClick={handleVerify}>
               Verify OTP
             </button>
           </div>
@@ -92,6 +114,11 @@ const Signup = () => {
             onChange={handleChange}
             required
           />
+          {passwordError && (
+            <p className="error-text" style={{ color: "red", fontSize: "13px" }}>
+              {passwordError}
+            </p>
+          )}
 
           <input
             type="password"
@@ -124,13 +151,20 @@ const Signup = () => {
             </label>
           </div>
 
-          <button type="submit" className="btn-primary">
+          <button
+            type="submit"
+            className="btn-primary"
+            disabled={!!passwordError}
+          >
             Register
           </button>
         </form>
 
         <p className="footer-text">
-          Already have an account? <Link to="/login" className="login-link">Login</Link>
+          Already have an account?{" "}
+          <Link to="/login" className="login-link">
+            Login
+          </Link>
         </p>
       </div>
 
@@ -142,14 +176,17 @@ const Signup = () => {
               await api.post("/verify-otp", {
                 subject: form.email,
                 otp: enteredOtp,
-                purpose: 'signup'
+                purpose: "signup",
               });
               alert("OTP verified!");
               setVerified(true);
               setOtpVisible(false);
             } catch (err) {
               console.error(err);
-              alert("OTP verification failed: " + (err.response?.data?.error || err.message));
+              alert(
+                "OTP verification failed: " +
+                  (err.response?.data?.error || err.message)
+              );
             }
           }}
         />
