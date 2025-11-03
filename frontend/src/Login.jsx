@@ -8,6 +8,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // 👁️ added toggle state
 
   // ✅ Password validation function
   const validatePassword = (password) => {
@@ -20,7 +21,6 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    // Check password validation
     if (!validatePassword(password)) {
       setError(
         "Password must be at least 8 characters long, contain at least one uppercase, one lowercase, one number, and one special character."
@@ -28,7 +28,7 @@ const Login = () => {
       return;
     }
 
-    // Just simulate login — front-end only
+    // Frontend simulated login
     if (email === "user@test.com") {
       navigate("/home");
     } else if (email === "host@test.com") {
@@ -59,16 +59,26 @@ const Login = () => {
               required
             />
 
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                setError(""); // clear error when typing
-              }}
-              required
-            />
+            {/* ✅ Password Input with Eye Icon */}
+            <div className="password-field">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setError(""); // clear error when typing
+                }}
+                required
+              />
+              <span
+                className="eye-icon"
+                onClick={() => setShowPassword(!showPassword)}
+                title={showPassword ? "Hide Password" : "Show Password"}
+              >
+                👁️
+              </span>
+            </div>
 
             {/* ✅ Show password validation error */}
             {error && <p className="error-text">{error}</p>}
