@@ -14,9 +14,21 @@ const Signup = () => {
   });
   const [otpVisible, setOtpVisible] = useState(false);
   const [verified, setVerified] = useState(false);
+  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleChange = (e) =>
+  // ✅ Password validation function
+  const validatePassword = (password) => {
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return passwordRegex.test(password);
+  };
+
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setError("");
+  };
 
   const handleVerify = () => {
     setOtpVisible(true);
@@ -24,9 +36,20 @@ const Signup = () => {
 
   const handleSignup = (e) => {
     e.preventDefault();
+
     if (!verified) return alert("Please verify OTP first");
-    if (form.password !== form.confirmPassword)
-      return alert("Passwords do not match");
+
+    if (!validatePassword(form.password)) {
+      setError(
+        "Password must be at least 8 characters long and include one uppercase, one lowercase, one number, and one special character."
+      );
+      return;
+    }
+
+    if (form.password !== form.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
 
     form.role === "user" ? navigate("/home") : navigate("/host");
   };
@@ -43,6 +66,8 @@ const Signup = () => {
             onChange={handleChange}
             required
           />
+
+          {/* ✅ Email + Verify OTP in one row */}
           <div className="otp-row">
             <input
               type="text"
@@ -56,21 +81,44 @@ const Signup = () => {
             </button>
           </div>
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            onChange={handleChange}
-            required
-          />
+          {/* ✅ Password Field with Static Eye Icon */}
+          <div className="password-field">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              onChange={handleChange}
+              required
+            />
+            <span
+              className="eye-icon"
+              onClick={() => setShowPassword(!showPassword)}
+              title={showPassword ? "Hide Password" : "Show Password"}
+            >
+              👁️
+            </span>
+          </div>
 
-          <input
-            type="password"
-            name="confirmPassword"
-            placeholder="Confirm Password"
-            onChange={handleChange}
-            required
-          />
+          {/* ✅ Confirm Password Field with Static Eye Icon */}
+          <div className="password-field">
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              name="confirmPassword"
+              placeholder="Confirm Password"
+              onChange={handleChange}
+              required
+            />
+            <span
+              className="eye-icon"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              title={showConfirmPassword ? "Hide Password" : "Show Password"}
+            >
+              👁️
+            </span>
+          </div>
+
+          {/* ✅ Error message */}
+          {error && <p className="error-text">{error}</p>}
 
           <div className="role-row">
             <label>
@@ -101,10 +149,14 @@ const Signup = () => {
         </form>
 
         <p className="footer-text">
-          Already have an account? <Link to="/login" className="login-link">Login</Link>
+          Already have an account?{" "}
+          <Link to="/login" className="login-link">
+            Login
+          </Link>
         </p>
       </div>
 
+      {/* ✅ OTP Modal */}
       {otpVisible && (
         <OTPModal
           onClose={() => setOtpVisible(false)}
