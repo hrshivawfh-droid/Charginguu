@@ -1,6 +1,8 @@
+// Signup.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import OTPModal from "./OTPModal";
+import api from "./api";  // import axios instance
 import "./Auth.css";
 
 const Signup = () => {
@@ -18,17 +20,40 @@ const Signup = () => {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleVerify = () => {
-    setOtpVisible(true);
+  const handleVerify = async () => {
+    try {
+      // Send OTP to email/mobile
+      await api.post("/send-Otp", {
+        subject: form.email,
+        purpose: "signup"
+      });
+      setOtpVisible(true);
+      alert("OTP sent to your email/mobile.");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to send OTP: " + (err.response?.data?.error || err.message));
+    }
   };
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     if (!verified) return alert("Please verify OTP first");
     if (form.password !== form.confirmPassword)
       return alert("Passwords do not match");
 
-    form.role === "user" ? navigate("/home") : navigate("/host");
+    try {
+      await api.post("/register", {
+        name: form.name,
+        email: form.email,
+        password: form.password,
+        role: form.role,
+      });
+      alert("Signup successful!");
+      form.role === "user" ? navigate("/home") : navigate("/host");
+    } catch (err) {
+      console.error(err);
+      alert("Signup failed: " + (err.response?.data?.error || err.message));
+    }
   };
 
   return (
@@ -51,7 +76,11 @@ const Signup = () => {
               onChange={handleChange}
               required
             />
-            <button type="button" className="btn-otp" onClick={handleVerify}>
+            <button
+              type="button"
+              className="btn-otp"
+              onClick={handleVerify}
+            >
               Verify OTP
             </button>
           </div>
@@ -108,9 +137,20 @@ const Signup = () => {
       {otpVisible && (
         <OTPModal
           onClose={() => setOtpVisible(false)}
-          onVerify={() => {
-            setVerified(true);
-            setOtpVisible(false);
+          onVerify={async (enteredOtp) => {
+            try {
+              await api.post("/verify-otp", {
+                subject: form.email,
+                otp: enteredOtp,
+                purpose: 'signup'
+              });
+              alert("OTP verified!");
+              setVerified(true);
+              setOtpVisible(false);
+            } catch (err) {
+              console.error(err);
+              alert("OTP verification failed: " + (err.response?.data?.error || err.message));
+            }
           }}
         />
       )}
