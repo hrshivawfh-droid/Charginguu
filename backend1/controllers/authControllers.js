@@ -19,7 +19,7 @@ function tokensForUser(user) {
 }
 
 // Registration (email + phone optional)
-async function register(req, res) {
+/*sync function register(req, res) {
   try {
     const { name, email, phone, password, requirePhoneVerification } = req.body;
     if (!password || (!email && !phone)) return res.status(400).json({ error: 'email or phone and password required' });
@@ -52,6 +52,87 @@ async function register(req, res) {
     console.error(err);
     res.status(500).json({ error: 'server_error' });
   }
+}*/
+// Registration (email + phone optional)
+async function register(req, res) {
+  try {
+    const { name, email, phone, password, requirePhoneVerification } = req.body;
+    
+    // Validate required fields
+    if (!password) {
+      return res.status(400).json({ error: 'Password is required' });
+    }
+    if (!email && !phone) {
+      return res.status(400).json({ error: 'Email or phone is required' });
+    }
+
+    // Check for existing users with more specific queries
+    let existingUser = null;
+    
+    if (email && phone) {
+      // If both email and phone provided, check if either exists
+      existingUser = await User.findOne({
+        $or: [
+          { email: email },
+          { phone: phone }
+        ]
+      });
+    } else if (email) {
+      // If only email provided, check only email
+      existingUser = await User.findOne({ email: email });
+    } else if (phone) {
+      // If only phone provided, check only phone
+      existingUser = await User.findOne({ phone: phone });
+    }
+
+    if (existingUser) {
+      // Provide more specific error messages
+      if (email && existingUser.email === email) {
+        return res.status(400).json({ error: 'Email already registered' });
+      }
+      if (phone && existingUser.phone === phone) {
+        return res.status(400).json({ error: 'Phone number already registered' });
+      }
+    }
+
+    const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+    const user = new User({
+      name,
+      email: email || undefined, // Only set if provided
+      phone: phone || undefined, // Only set if provided
+      passwordHash,
+      emailVerified: false,
+      phoneVerified: false,
+      loginMethods: ['local']
+    });
+    
+    await user.save();
+
+    // Optionally send OTP to verify phone immediately
+    if (phone && requirePhoneVerification) {
+      const otp = genOtp();
+      await Otp.create({ 
+        subject: phone, 
+        otpHash: hashOtp(otp), 
+        purpose: 'verify_phone', 
+        expiresAt: getExpiryDate() 
+      });
+      await sendOtpSms(phone, otp);
+      return res.status(201).json({ 
+        ok: true, 
+        message: 'User created. OTP sent to phone for verification.' 
+      });
+    }
+
+    return res.status(201).json({ 
+      ok: true, 
+      message: 'User created successfully',
+      user: { id: user._id, name: user.name, email: user.email, phone: user.phone }
+    });
+  } catch (err) {
+    console.error('Registration error:', err);
+    res.status(500).json({ error: 'Registration failed. Please try again.' });
+  }
 }
 
 // Login with email or phone + password
@@ -79,7 +160,7 @@ async function login(req, res) {
 }
 
 // Send OTP for forgot password or phone verification
-async function sendOtp(req, res) {
+/*async function sendOtp(req, res) {
   try {
     const { subject, purpose = 'password_reset' } = req.body; // subject = email or phone
     if (!subject) return res.status(400).json({ error: 'subject required' });
@@ -110,6 +191,47 @@ if (purpose === 'signup') {
   } catch (err) {
     console.error(err);
     res.status(500).json({ ok:true }); // generic
+  }
+}*/
+async function sendOtp(req, res) {
+  try {
+    const { subject, purpose = 'password_reset' } = req.body;
+    if (!subject) return res.status(400).json({ error: 'subject required' });
+
+    const isEmail = subject.includes('@');
+
+    // For security, check user existence for password reset
+    if (purpose === 'password_reset') {
+      const user = isEmail 
+        ? await User.findOne({ email: subject }) 
+        : await User.findOne({ phone: subject });
+      
+      if (!user) {
+        // Still return success to prevent email/phone enumeration
+        return res.json({ ok: true, message: 'If account exists, OTP will be sent' });
+      }
+    }
+    // For signup, we don't check user existence (allow new users)
+
+    const otp = genOtp();
+    await Otp.create({ 
+      subject, 
+      otpHash: hashOtp(otp), 
+      purpose, 
+      expiresAt: getExpiryDate() 
+    });
+
+    if (isEmail) {
+      await sendOtpEmail(subject, otp, purpose);
+    } else {
+      await sendOtpSms(subject, otp);
+    }
+
+    return res.json({ ok: true, message: 'OTP sent successfully' });
+  } catch (err) {
+    console.error('Send OTP error:', err);
+    // For security, return generic success message even on error
+    return res.json({ ok: true, message: 'If account exists, OTP will be sent' });
   }
 }
 
