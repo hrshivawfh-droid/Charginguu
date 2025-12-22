@@ -1,0 +1,4 @@
+.profile-section { padding: 16px; min-height: 100%; }
+.section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+.section-header span { cursor: pointer; font-size: 22px; }
+.section-content { min-height: 200px; }

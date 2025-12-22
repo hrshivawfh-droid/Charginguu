@@ -1,0 +1,156 @@
+/* ROOT */
+.home-root {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f5f7fb;
+}
+
+/* TOP BAR */
+.home-topbar {
+  height: 60px;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  gap: 12px;
+  color: white;
+}
+
+.home-logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.logo-circle {
+  width: 32px;
+  height: 32px;
+  background: white;
+  color: #2563eb;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-text {
+  font-weight: 600;
+  font-size: 16px;
+  color: #7bd7ff;
+}
+
+.home-search {
+  flex: 1;
+  height: 36px;
+  border-radius: 18px;
+  border: none;
+  padding: 0 14px;
+  outline: none;
+}
+
+.home-profile {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* MAP */
+.home-map {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: #ddd;
+}
+
+/* ZOOM WRAPPER */
+.map-zoom-wrapper {
+  width: 100%;
+  height: 100%;
+  transform-origin: center;
+  transition: transform 0.25s ease-in-out;
+}
+
+.map-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* PINS */
+.map-pin {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: red;
+  border-radius: 50%;
+  border: 2px solid white;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 6px rgba(0,0,0,0.4);
+}
+
+/* ZOOM BUTTONS */
+.map-zoom-controls {
+  position: absolute;
+  top: 20px;
+  right: 14px;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.map-zoom-controls button {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.map-zoom-controls button:hover {
+  background: #f0f0f0;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .home-topbar {
+    gap: 8px;
+  }
+
+  .logo-text {
+    display: none;
+  }
+
+  .map-zoom-controls {
+    top: 16px;
+    right: 10px;
+  }
+}
+
+
+/* PROFILE ICON */
+.home-profile-icon {
+  width: 36px;
+  height: 36px;
+  background: white;
+  color: #2563eb;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .logo-text {
+    display: none;
+  }
+}

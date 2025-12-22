@@ -1,0 +1,58 @@
+.app-header {
+  height: 60px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e5e5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* LOGO */
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: bold;
+}
+
+.logo-icon {
+  color: #00b16a;
+  font-size: 20px;
+}
+
+.logo-text {
+  font-size: 16px;
+}
+
+/* SEARCH */
+.header-search {
+  flex: 1;
+  margin: 0 12px;
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  outline: none;
+}
+
+/* PROFILE ICON */
+.header-profile img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* MOBILE VIEW */
+@media (max-width: 768px) {
+  .logo-text {
+    display: none;
+  }
+
+  .header-search {
+    margin: 0 8px;
+  }
+}

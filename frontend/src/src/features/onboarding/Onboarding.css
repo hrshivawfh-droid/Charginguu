@@ -1,0 +1,102 @@
+.onboarding-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+ background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+}
+
+.onboarding-content {
+  width: 100%;
+  max-width: 360px;
+  padding: 24px;
+  text-align: center;
+}
+
+/* LOGO */
+.logo {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: #2ecc71;
+  color: white;
+  font-size: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* TEXT */
+.app-name {
+  font-size: 28px;
+  font-weight: 700;
+  color: #f5f7f9;
+  margin-bottom: 16px;
+}
+
+.app-text {
+  font-size: 15px;
+  color: #f7f8fb;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+/* BUTTON */
+.start-button {
+  width: 100%;
+  margin-top: 30px;
+  padding: 14px;
+  background: #1f2933;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+/* DESKTOP VIEW */
+@media (min-width: 768px) {
+  .onboarding-content {
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+  }
+}
+/*.onboard-container {
+  min-height: 100vh;
+  background: url("https://images.unsplash.com/photo-1581092160607-ee22621dd758")
+    center/cover no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.onboard-card {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.onboard-card h1 {
+  margin-bottom: 10px;
+}
+
+.onboard-card p {
+  font-size: 14px;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.onboard-card button {
+  background: #2c5364;
+  color: white;
+  padding: 12px;
+  width: 100%;
+  border-radius: 8px;
+  font-size: 16px;
+}*/

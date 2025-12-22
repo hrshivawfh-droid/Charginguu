@@ -1,0 +1,18 @@
+.sidebar {
+  width: 220px;
+  background: #fff;
+  border-right: 1px solid #ddd;
+  padding: 12px;
+  position: absolute;
+  z-index: 10;
+  height: 100%;
+}
+
+.sidebar p {
+  padding: 10px 0;
+  border-bottom: 1px dashed #ccc;
+}
+
+.logout {
+  color: red;
+}

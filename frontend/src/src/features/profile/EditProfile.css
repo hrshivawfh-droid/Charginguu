@@ -1,0 +1,26 @@
+.edit-profile { padding: 16px; }
+
+.edit-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+.edit-header span { cursor: pointer; font-size: 22px; }
+
+.avatar-section { text-align: center; margin-bottom: 20px; }
+.avatar-section img { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; }
+.upload-btn { display: inline-block; margin-top: 10px; color: #2563eb; cursor: pointer; }
+
+.form input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.save-btn {
+  width: 100%;
+  padding: 14px;
+  background: #1f2933;
+  color: white;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+}
